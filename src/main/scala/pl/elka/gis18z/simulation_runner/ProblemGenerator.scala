@@ -17,22 +17,16 @@ import scala.util.control.Breaks._
   */
 class ProblemGenerator(appConfig: AppConfig) {
   def generate(): List[ProblemInstance] = {
-    var problemInstances: List[ProblemInstance] = List()
 
     val verticesNoSeq = List.range(appConfig.n1, appConfig.n2 + 1, appConfig.s)
     val avgDepthSeq = arr(appConfig.d1, appConfig.d2, appConfig.s) // FIXME - generować rozkład stopni, nie avg
 
-    val randomSeed = new Random()
+    val randomSeed = Random
 
-    for( (n, depth) <- verticesNoSeq zip avgDepthSeq) {
-
-      val tree1 = generateSingleRandomUnRootedTree(n, depth, randomSeed)
-      val tree2 = generateSingleRandomUnRootedTree(n, depth, randomSeed)
-
-      problemInstances = ProblemInstance(tree1, tree2) :: problemInstances
+    (verticesNoSeq zip avgDepthSeq).map {
+      case (n, depth) =>
+        ProblemInstance(generateSingleRandomUnRootedTree(n, depth, randomSeed), generateSingleRandomUnRootedTree(n, depth, randomSeed))
     }
-
-    problemInstances
   }
 
 
@@ -40,17 +34,13 @@ class ProblemGenerator(appConfig: AppConfig) {
     // n wierzchołków i głębokość d -> jaki stopień wierzchołka?
     val degree = Math.pow(n , 1f / depth.toFloat).ceil.toInt
 
-    var vertices = List[Vertice]()
-    var edges = List[UndirectedEdge]()
+    var edges: List[UndirectedEdge] = List.empty
 
-    val randomVerticesSeq = randomSeed.shuffle(1 to n)
-    for(i <- randomVerticesSeq) {
-      vertices =  Vertice(i) :: vertices
-    }
+    val vertices: List[Vertice] = randomSeed.shuffle(1 to n).map(Vertice).toList
     var legalVertices: Set[Vertice] = vertices.toSet
 
     def appendChildren(v: Vertice): Unit = {
-      var neighbours: List[Vertice] = List()
+      var neighbours: List[Vertice] = List.empty
 
       breakable {
         for(c <- 1 to degree) {
@@ -66,9 +56,7 @@ class ProblemGenerator(appConfig: AppConfig) {
         }
       }
 
-      for(n <- neighbours) {
-        appendChildren(n)
-      }
+      neighbours.foreach(appendChildren)
     }
     val someRndVertice = legalVertices.head
     legalVertices -= someRndVertice
@@ -78,18 +66,15 @@ class ProblemGenerator(appConfig: AppConfig) {
   }
 
   def arr(from: Int, to: Int, stepsNo: Int): List[Int] = {
-    var res = List[Int]()
-    val random = new Random()
+
+    val random = Random
 
     val step = (to - from).toFloat / stepsNo.toFloat
-    for(s <- 1 to stepsNo) {
 
+    (1 to stepsNo).map(s => {
       val lower = (from + step * s).toInt
       val upper = (to + step * s).toInt
-
-      res = random.nextInt(upper - lower + 1) + lower :: res
-    }
-
-    res
+      random.nextInt(upper - lower + 1) + lower
+    }).toList
   }
 }
