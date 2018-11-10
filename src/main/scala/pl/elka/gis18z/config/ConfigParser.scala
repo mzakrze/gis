@@ -17,6 +17,8 @@ class ConfigParser(args: Array[String]) extends ScallopConf(args) {
   val r = opt[Int]("repeat", descr = "How many times to repeat each experiment per problem size", required = true)
   val out = opt[String]("output", descr = "Folder name to dump all data",default = null, required = false)
 
+  footer("\nExample:\n    --n1 10 --n2 20 --d1 2 --d2 4 --steps 10 --repeat 1")
+
   verify()
 
   override def onError(e: Throwable): Unit = e match {
@@ -24,6 +26,8 @@ class ConfigParser(args: Array[String]) extends ScallopConf(args) {
       println("Error: argument " + optionName + " not provided.\n")
       printHelp()
       throw e
+    case npe: NullPointerException =>
+      // biblioteka Scallop rzuca czasem npe bez żadnego komunikatu (sic!!)
   }
 
   def parse(): AppConfig = {

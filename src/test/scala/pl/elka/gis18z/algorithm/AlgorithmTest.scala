@@ -33,7 +33,6 @@ class AlgorithmTest extends FlatSpec {
     val graph1 = transform(tree1)
     val graph2 = transform(tree2)
 
-    // FIXME - to chyba nie działą
     val referenceSolution = new VF2GraphIsomorphismInspector(graph1, graph2)
 
     val solution = UnRootedTreeIsomorphismAlgorithm.areIsomorphic(tree1, tree2)
