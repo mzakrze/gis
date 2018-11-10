@@ -26,7 +26,7 @@ class ProblemGenerator(appConfig: AppConfig) {
 
     (verticesNoSeq zip treeDepthSeq).map {
       case (n, depth) =>
-        ProblemInstance(generateSingleRandomUnRootedTree(n, depth, randomSeed), generateSingleRandomUnRootedTree(n, depth, randomSeed))
+        ProblemInstance(n, depth, generateSingleRandomUnRootedTree(n, depth, randomSeed), generateSingleRandomUnRootedTree(n, depth, randomSeed))
     }
   }
 
