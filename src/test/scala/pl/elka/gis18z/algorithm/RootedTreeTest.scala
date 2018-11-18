@@ -17,26 +17,26 @@ class RootedTreeTest extends FlatSpec with Matchers {
     )
 
     RootedTree.createFromUnRootedTree(unRootedTree, Vertice(5)) should be (RootedTree(
-      Node(5, Vertice(-1), List(
+      Node.withChildren(5, Vertice(-1), List(
         Node(1, Vertice(5)),
         Node(4, Vertice(5)),
-        Node(6, Vertice(5), List(
-          Node(2, Vertice(6), List(
+        Node.withChildren(6, Vertice(5), List(
+          Node.withChildren(2, Vertice(6), List(
             Node(3, Vertice(2))
             )),
           Node(7, Vertice(6)),
           Node(8, Vertice(6)),
-          Node(9, Vertice(6), List(
+          Node.withChildren(9, Vertice(6), List(
             Node(12, Vertice(9)),
             Node(13, Vertice(9)),
             Node(14, Vertice(9))
             )),
-          Node(10, Vertice(6), List(
+          Node.withChildren(10, Vertice(6), List(
             Node(11, Vertice(10))
             )))),
-        Node(15, Vertice(5), List(
+        Node.withChildren(15, Vertice(5), List(
           Node(16, Vertice(15)),
-          Node(17, Vertice(15), List(
+          Node.withChildren(17, Vertice(15), List(
             Node(18, Vertice(17)),
             Node(19, Vertice(17))))))
         ))))
@@ -44,26 +44,26 @@ class RootedTreeTest extends FlatSpec with Matchers {
 
   "Function height" should "return " in {
     RootedTree(
-      Node(5, Vertice(-1), List(
+      Node.withChildren(5, Vertice(-1), List(
         Node(1, Vertice(5)),
         Node(4, Vertice(5)),
-        Node(6, Vertice(5), List(
-          Node(2, Vertice(6), List(
+        Node.withChildren(6, Vertice(5), List(
+          Node.withChildren(2, Vertice(6), List(
             Node(3, Vertice(2))
           )),
           Node(7, Vertice(6)),
           Node(8, Vertice(6)),
-          Node(9, Vertice(6), List(
+          Node.withChildren(9, Vertice(6), List(
             Node(12, Vertice(9)),
             Node(13, Vertice(9)),
             Node(14, Vertice(9))
           )),
-          Node(10, Vertice(6), List(
+          Node.withChildren(10, Vertice(6), List(
             Node(11, Vertice(10))
           )))),
-        Node(15, Vertice(5), List(
+        Node.withChildren(15, Vertice(5), List(
           Node(16, Vertice(15)),
-          Node(17, Vertice(15), List(
+          Node.withChildren(17, Vertice(15), List(
             Node(18, Vertice(17)),
             Node(19, Vertice(17))))))
       ))).height() should be (4)
