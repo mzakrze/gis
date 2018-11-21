@@ -1,6 +1,8 @@
-package pl.elka.gis18z.algorithm
+package pl.elka.gis18z.algorithm.rootedisomorphic
 
-sealed trait Tree extends AbstractVertice
+import pl.elka.gis18z.algorithm._
+
+sealed trait Tree
 
 object Node {
   def withChildren(id: Int, parent: AbstractVertice, children: Seq[Node] = Seq.empty): Node = {
@@ -10,6 +12,7 @@ object Node {
     new Node(id = id, parent = parent)
   }
 }
+
 case class Node(id: Int,
                 parent: AbstractVertice,
                 label: Int = 0,
@@ -40,7 +43,7 @@ object RootedTree {
                 centerVertice,
                 vertice,
                 unRootedTree.copy(edges = unRootedTree.edges.filter(v => v.v1 != centerVertice && v.v2 != centerVertice),
-                  vertices = unRootedTree.vertices.filter(_ != centerVertice).map(_.asInstanceOf[Node])))
+                  vertices = unRootedTree.vertices.filter(_ != centerVertice)))
             })))
     }
   }
@@ -52,10 +55,10 @@ case class RootedTree(root: Tree){
     case n: Node => 1 + n.children.map(t => height(t)).max
   }
 
-  def bfs(fun: (Int, Node) => Unit, tree: Tree = root, depth: Int = 0): Unit = tree match {
+  def dfs(fun: (Int, Node) => Unit, tree: Tree = root, depth: Int = 0): Unit = tree match {
     case n: Node if n.children.isEmpty => fun(depth, n)
     case n: Node =>
-      n.children.foreach(t => bfs(fun, t, depth+1))
+      n.children.foreach(t => dfs(fun, t, depth+1))
       fun(depth, n)
   }
 }

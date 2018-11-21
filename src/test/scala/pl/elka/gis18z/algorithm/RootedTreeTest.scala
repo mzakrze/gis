@@ -1,6 +1,7 @@
 package pl.elka.gis18z.algorithm
 
 import org.scalatest._
+import pl.elka.gis18z.algorithm.rootedisomorphic.{Node, RootedTree}
 
 class RootedTreeTest extends FlatSpec with Matchers {
 
