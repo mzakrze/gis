@@ -17,6 +17,8 @@ object UnRootedTreeIsomorphismAlgorithm {
         rootedTree2 = RootedTree.createFromUnRootedTree(tree2, center2.last)
         mapping = RootedIsomorphic.rootedIsomorphic(rootedTree1, rootedTree2)
         Solution(mapping.nonEmpty, mapping)
+      case Nil => Solution(false, List.empty)
+      case _ => Solution(true, mapping)
     }
   }
 }
