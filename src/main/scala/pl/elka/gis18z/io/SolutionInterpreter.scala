@@ -5,6 +5,6 @@ import pl.elka.gis18z.simulation_runner.SimulationResult
 
 class SolutionInterpreter(config: AppConfig) {
   def interpret(res: SimulationResult) = {
-
+    println(res)
   }
 }

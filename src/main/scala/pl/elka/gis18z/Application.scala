@@ -1,7 +1,7 @@
 package pl.elka.gis18z
 
 import org.rogach.scallop.exceptions.RequiredOptionNotFound
-import pl.elka.gis18z.config.{ConfigParser, InvalidConfigurationException}
+import pl.elka.gis18z.config.{AppConfig, ConfigParser, InvalidConfigurationException}
 import pl.elka.gis18z.io.SolutionInterpreter
 import pl.elka.gis18z.simulation_runner.{SimulationResult, SimulationRunner}
 
@@ -17,7 +17,7 @@ object Application extends App {
 
     try {
 
-      val config = new ConfigParser(args).parse()
+      val config = AppConfig(10,20,2,4,10,1,"")
 
       val simulationResult: SimulationResult = new SimulationRunner(config).run()
 

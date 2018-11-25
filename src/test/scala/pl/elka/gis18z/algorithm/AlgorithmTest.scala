@@ -12,7 +12,7 @@ class AlgorithmTest extends FlatSpec {
   "An algorithm" should "work" in {
 
     val n1 = 10
-    val n2 = 20
+    val n2 = 40
     val d1 = 3
     val d2 = 20
     val s = 10

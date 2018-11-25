@@ -5,15 +5,19 @@ import pl.elka.gis18z.algorithm._
 sealed trait Tree
 
 object Node {
-  def withChildren(id: Int, parent: AbstractVertice, children: Seq[Node] = Seq.empty): Node = {
-    new Node(id = id, parent = parent, children = children)
+  def withChildren(id: Int, parent: AbstractVertice, children: Seq[Node] = Seq.empty, treeId: Int = 0): Node = {
+    new Node(id = id, treeId = treeId, parent = parent, children = children)
+  }
+  def apply(id: Int, parent: AbstractVertice, treeId: Int ): Node = {
+    new Node(id = id, treeId = treeId, parent = parent)
   }
   def apply(id: Int, parent: AbstractVertice): Node = {
-    new Node(id = id, parent = parent)
+    new Node(id = id, treeId = 0, parent = parent)
   }
 }
 
 case class Node(id: Int,
+                treeId: Int,
                 parent: AbstractVertice,
                 label: Int = 0,
                 orderedLabel: Seq[Int] = Seq.empty,
@@ -22,29 +26,32 @@ case class Node(id: Int,
 
 object RootedTree {
   def createFromUnRootedTree(unRootedTree: UnRootedTree,
-                             centerVertice: AbstractVertice): RootedTree = {
-    RootedTree(createTree(Vertice(-1), centerVertice, unRootedTree).head)
+                             centerVertice: AbstractVertice,
+                             id: Int): RootedTree = {
+    RootedTree(createTree(Vertice(-1), centerVertice, unRootedTree, id))
   }
 
   private def createTree(parent: AbstractVertice,
                          centerVertice: AbstractVertice,
-                         unRootedTree: UnRootedTree): Seq[Node] = {
-    unRootedTree.edges.filter(v => v.v1 == centerVertice || v.v2 == centerVertice) match {
-      case Nil => Seq(Node(centerVertice.id, parent))
+                         unRootedTree: UnRootedTree,
+                         id: Int): Node = {
+    val groupedEdges = unRootedTree.edges.groupBy(v => v.v1.id == centerVertice.id || v.v2.id == centerVertice.id)
+    groupedEdges.getOrElse(true, Nil) match {
+      case Nil => Node(centerVertice.id, parent, id)
       case e: List[UndirectedEdge] =>
-        Seq(
           Node(
             centerVertice.id,
+            id,
             parent,
             0, Seq.empty, Seq.empty,
-            e.flatMap(edge => {
-              val vertice = if (edge.v1 == centerVertice) edge.v2 else edge.v1
+            e.map(edge => {
+              val vertice = if (edge.v1.id == centerVertice.id) edge.v2 else edge.v1
               createTree(
                 centerVertice,
                 vertice,
-                unRootedTree.copy(edges = unRootedTree.edges.filter(v => v.v1 != centerVertice && v.v2 != centerVertice),
-                  vertices = unRootedTree.vertices.filter(_ != centerVertice)))
-            })))
+                unRootedTree.copy(edges = groupedEdges.getOrElse(false, Nil), vertices = unRootedTree.vertices.filter(_ != centerVertice)),
+                id)
+            }))
     }
   }
 }
