@@ -17,17 +17,24 @@ class ProblemGenerator(appConfig: AppConfig) {
 
   def generate(): List[ProblemInstance] = {
 
-    val verticesNoSeq = generateSteps(appConfig.n1, appConfig.n2, appConfig.s)
-    val treeDepthSeq = generateSteps(appConfig.d1, appConfig.d2, appConfig.s)
-
-    assertConfigIsOk(verticesNoSeq, treeDepthSeq)
+    val verticesNoSeq = generateSteps(appConfig.n1, appConfig.n2, appConfig.ns)
+    val treeDepthSeq = generateSteps(appConfig.d1, appConfig.d2, appConfig.ds)
 
     val randomSeed = Random
 
-    (verticesNoSeq zip treeDepthSeq).map {
-      case (n, depth) =>
-        ProblemInstance(n, depth, generateSingleRandomUnRootedTree(n, depth, randomSeed), generateSingleRandomUnRootedTree(n, depth, randomSeed))
-    }
+    val problems =
+      for (n <- verticesNoSeq) yield {
+        for(depth <- treeDepthSeq)
+          yield
+            if(n <= depth) {
+              // TODO generate warnign
+              null
+            } else {
+               ProblemInstance(n, depth, generateSingleRandomUnRootedTree(n, depth, randomSeed), generateSingleRandomUnRootedTree(n, depth, randomSeed))
+            }
+      }
+
+    problems.flatten.filter(p => p != null)
   }
 
   private def generateSteps(lower: Int, upper: Int, stepsNo: Int): List[Int] = {
@@ -82,13 +89,4 @@ class ProblemGenerator(appConfig: AppConfig) {
     UnRootedTree(vertices, edges)
   }
 
-  private def assertConfigIsOk(verticesSeq: List[Int], depthSeq: List[Int]): Unit = {
-    (verticesSeq zip depthSeq). map {
-      case (verticesNo, depth) =>
-        if(verticesNo <= depth){
-          throw InvalidConfigurationException("Illegal depth " + depth + " for " + verticesNo + " vertices")
-        }
-
-    }
-  }
 }

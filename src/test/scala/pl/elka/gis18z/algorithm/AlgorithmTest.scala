@@ -13,11 +13,12 @@ class AlgorithmTest extends FlatSpec {
 
     val n1 = 10
     val n2 = 40
+    val ns = 10
     val d1 = 3
     val d2 = 20
-    val s = 10
+    val ds = 10
 
-    val appConfig = AppConfig(n1, n2, d1, d2, s, 0, null)
+    val appConfig = AppConfig(n1, n2, ns, d1, d2, ds, 0, null)
 
     val problemInstances = new ProblemGenerator(appConfig).generate()
 
