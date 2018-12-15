@@ -18,7 +18,7 @@ class ConfigParser(args: Array[String]) extends ScallopConf(args) {
   val r = opt[Int]("repeat", descr = "How many times to repeat each experiment per problem size", required = true)
   val out = opt[String]("output", descr = "Folder name to dump all results",default = null, required = true)
 
-  footer("\nExample:\n    --n1 10 --n2 20 --n3 5 --d1 3 --d2 3 --ds --steps 10 --repeat 1 --output result")
+  footer("\nExample:\n    --n1 100 --n2 200 --ns 100 --d1 10 --d2 20 --ds 2 --repeat 5 --output result")
 
   verify()
 

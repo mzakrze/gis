@@ -17,7 +17,7 @@ object Application extends App {
 
     try {
 
-      val config = AppConfig(100, 200, 50, 4, 4, 1, 1, "result")
+      val config = new ConfigParser(args).parse()
 
       val simulationResult: SimulationResult = new SimulationRunner(config).run()
 
