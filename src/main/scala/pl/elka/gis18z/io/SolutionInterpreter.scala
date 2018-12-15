@@ -7,15 +7,16 @@ import pl.elka.gis18z.simulation_runner.SimulationResult
 
 class SolutionInterpreter(config: AppConfig) {
 
-  // TODO - można pliki gdzie indziej umieścic
-
   def interpret(res: SimulationResult) = {
+    println("Dumping results...")
 
     val fileContent = getFileContent(res)
 
-    writeToFile(fileContent)
+    val folderPath = writeToFile(fileContent)
 
     runRScriptSync()
+
+    println("Results dumped to: " + folderPath)
   }
 
   def getFileContent(res: SimulationResult): String = {
@@ -32,17 +33,17 @@ class SolutionInterpreter(config: AppConfig) {
     header + body
   }
 
-  def writeToFile(fileContent: String): Unit = {
-    // TODO - info gdzie jest plik itp
-    val f = new java.io.File(config.out)
-    f.delete()
-    f.mkdir()
-    val file = new java.io.File(f.getPath() + "/result.csv")
+  def writeToFile(fileContent: String): String = {
+    val folder = new java.io.File(config.out)
+    folder.delete()
+    folder.mkdir()
+    val file = new java.io.File(folder.getPath() + "/result.csv")
     file.delete()
     file.createNewFile()
     val bw = new BufferedWriter(new FileWriter(file))
     bw.write(fileContent)
     bw.close()
+    folder.getAbsolutePath
   }
 
   def runRScriptSync(): Unit = {
