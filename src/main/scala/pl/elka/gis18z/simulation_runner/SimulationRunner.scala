@@ -24,9 +24,9 @@ class SimulationRunner(config: AppConfig) {
     for(p <- problemInstances) {
       val times = (for(i <- 0 to repeat) yield {
 
-        val start = System.nanoTime()
+        val start = System.currentTimeMillis()
         areIsomorphic = UnRootedTreeIsomorphismAlgorithm.areIsomorphic(p.tree1, p.tree2).areIsomorphic
-        val stop = System.nanoTime()
+        val stop = System.currentTimeMillis()
 
         stop - start
       }).toList

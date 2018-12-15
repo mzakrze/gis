@@ -20,7 +20,7 @@ class SolutionInterpreter(config: AppConfig) {
 
   def getFileContent(res: SimulationResult): String = {
     val sep = ";"
-    val headers = List("Number of vertices", "Depth of tree", "Are isomorphic", "Time [ns]")
+    val headers = List("Number of vertices", "Depth of tree", "Are isomorphic", "Time [ms]")
     type Row = (Int, Int, Boolean, Int)
 
     val rows = for((problemSize, result) <- res.problemSizeToSolution) yield
