@@ -174,6 +174,6 @@ class RootedTreeTest extends FlatSpec with Matchers {
           Node.withChildren(17, Vertice(15), List(
             Node(18, Vertice(17)),
             Node(19, Vertice(17))))))
-      ))).height() should be (4)
+      ))).height() should be (3)
   }
 }
