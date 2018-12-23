@@ -26,7 +26,7 @@ object RootedIsomorphic {
 
     if(L.last._2.head.label == L.last._2.last.label) {
       val mapping = generateMapping(L.last._2.head, L.last._2.last,List.empty).map(n => (Vertice(n._1.id),Vertice(n._2.id)))
-      if(mapping.length == L.map(_._2.length).sum) mapping else List.empty
+      if(mapping.length == L.map(_._2.length).sum/2) mapping else List.empty
     } else
       List.empty
   }
