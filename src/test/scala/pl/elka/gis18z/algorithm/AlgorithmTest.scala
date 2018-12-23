@@ -51,7 +51,7 @@ class AlgorithmTest extends FlatSpec with Matchers {
 
       UnRootedTreeIsomorphismAlgorithm.areIsomorphic(p.tree1, p.tree1).areIsomorphic shouldBe true
 
-      val tree1Copy = UnRootedTree(scala.util.Random.shuffle(p.tree1.vertices), p.tree1.edges)
+      val tree1Copy = UnRootedTree(scala.util.Random.shuffle(p.tree1.vertices), scala.util.Random.shuffle(p.tree1.edges))
 
       UnRootedTreeIsomorphismAlgorithm.areIsomorphic(p.tree1, tree1Copy).areIsomorphic shouldBe true
     }
