@@ -30,7 +30,7 @@ class SimulationRunner(config: AppConfig) {
     println("Running " + problemInstances.length + " instances, from n = " + config.n1 + " to n = " + config.n2 + " and from d = " + config.d1 + " to d = " + config.d2 + "...")
     for(p <- problemInstances) {
       print("\r")
-      print("Running for n = " + p.n + ", d = " + p.depth)
+      print("Running for d = " + p.depth + ", n = " + p.n)
       val times = (for(i <- 0 to repeat) yield {
 
         val start = System.currentTimeMillis()

@@ -35,6 +35,7 @@ class ProblemGenerator(appConfig: AppConfig) {
       }
 
     problems.flatten.filter(p => p != null)
+      .sortWith((p1, p2) => if (p1.depth != p2.depth) p1.depth < p2.depth else p1.n < p2.n)
   }
 
   private def generateSteps(lower: Int, upper: Int, stepsNo: Int): List[Int] = {
