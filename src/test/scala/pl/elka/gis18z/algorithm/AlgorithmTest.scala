@@ -1,13 +1,13 @@
 package pl.elka.gis18z.algorithm
 
 import org.jgrapht.Graph
-import org.jgrapht.alg.isomorphism.{VF2GraphIsomorphismInspector}
+import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector
 import org.jgrapht.graph.{DefaultEdge, DefaultUndirectedGraph}
-import org.scalatest.FlatSpec
+import org.scalatest.{FlatSpec, Matchers}
 import pl.elka.gis18z.config.AppConfig
 import pl.elka.gis18z.simulation_runner.ProblemGenerator
 
-class AlgorithmTest extends FlatSpec {
+class AlgorithmTest extends FlatSpec with Matchers {
 
   "An algorithm" should "work" in {
 
@@ -38,11 +38,7 @@ class AlgorithmTest extends FlatSpec {
 
     val solution = UnRootedTreeIsomorphismAlgorithm.areIsomorphic(tree1, tree2)
 
-    if(referenceSolution.isomorphismExists() == solution.areIsomorphic) {
-      println("Algorithm ok")
-    } else {
-      println("Algorithm FAILED !!!")
-    }
+    solution.areIsomorphic shouldBe referenceSolution.isomorphismExists()
   }
 
   def transform(tree: UnRootedTree): Graph[Int, DefaultEdge] = {
