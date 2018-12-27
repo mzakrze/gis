@@ -19,10 +19,25 @@ object Node {
 case class Node(id: Int,
                 treeId: Int,
                 parent: AbstractVertice,
-                label: Int = 0,
-                orderedLabel: Seq[Int] = Seq.empty,
-                orderedChildren: Seq[Node] = Seq.empty,
-                children: Iterable[Node] = Iterable.empty) extends Tree
+                var label: Option[Int] = None,
+                var orderedLabel: Seq[Int] = Seq.empty,
+                var orderedChildren: Seq[Node] = Seq.empty,
+                var children: Iterable[Node] = Iterable.empty) extends Tree {
+
+  def findNode(id: Int): Option[Node] = this match {
+    case n: Node if n.id == id => Some(n)
+    case n: Node if n.children.isEmpty => None
+    case n: Node => n.children.flatMap(m => m.findNode(id)).headOption
+  }
+
+  def mapNode(id: Int, node: Node): Unit = this match {
+    case n: Node if n.id == id =>
+      this.label = node.label
+      this.orderedLabel = node.orderedLabel
+      this.orderedChildren = node.orderedChildren
+    case n: Node => n.children.foreach(m => m.mapNode(id, node))
+  }
+}
 
 object RootedTree {
   def createFromUnRootedTree(unRootedTree: UnRootedTree,
@@ -43,7 +58,7 @@ object RootedTree {
             centerVertice.id,
             id,
             parent,
-            0, Seq.empty, Seq.empty,
+            None, Seq.empty, Seq.empty,
             e.map(edge => {
               val vertice = if (edge.v1.id == centerVertice.id) edge.v2 else edge.v1
               createTree(
@@ -67,5 +82,13 @@ case class RootedTree(root: Tree){
     case n: Node =>
       n.children.foreach(t => dfs(fun, t, depth+1))
       fun(depth, n)
+  }
+
+  def findNode(id: Int): Option[Node] = root match {
+    case n: Node => n.findNode(id)
+  }
+
+  def mapNode(node: Node): Unit = root match {
+    case n: Node => n.mapNode(node.id, node)
   }
 }

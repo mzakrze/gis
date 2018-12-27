@@ -57,6 +57,15 @@ class AlgorithmTest extends FlatSpec with Matchers {
     }
   }
 
+  "An algorithm" should "work with defined trees" in {
+    val tree1 = UnRootedTree(List(Vertice(7), Vertice(4), Vertice(1), Vertice(6), Vertice(10), Vertice(12), Vertice(9), Vertice(11), Vertice(13), Vertice(3), Vertice(8), Vertice(5), Vertice(2)),List(UndirectedEdge(Vertice(12),Vertice(2)), UndirectedEdge(Vertice(8),Vertice(9)), UndirectedEdge(Vertice(5),Vertice(8)), UndirectedEdge(Vertice(3),Vertice(5)), UndirectedEdge(Vertice(12),Vertice(3)), UndirectedEdge(Vertice(11),Vertice(12)), UndirectedEdge(Vertice(13),Vertice(11)), UndirectedEdge(Vertice(1),Vertice(13)), UndirectedEdge(Vertice(7),Vertice(1)), UndirectedEdge(Vertice(6),Vertice(7)), UndirectedEdge(Vertice(4),Vertice(6)), UndirectedEdge(Vertice(10),Vertice(4))))
+
+    val tree2 = UnRootedTree(List(Vertice(1), Vertice(2), Vertice(8), Vertice(13), Vertice(12), Vertice(5), Vertice(9), Vertice(4), Vertice(6), Vertice(7), Vertice(3), Vertice(10), Vertice(11)),List(UndirectedEdge(Vertice(1),Vertice(2)), UndirectedEdge(Vertice(8),Vertice(9)), UndirectedEdge(Vertice(5),Vertice(8)), UndirectedEdge(Vertice(3),Vertice(5)), UndirectedEdge(Vertice(12),Vertice(3)), UndirectedEdge(Vertice(11),Vertice(12)), UndirectedEdge(Vertice(13),Vertice(11)), UndirectedEdge(Vertice(1),Vertice(13)), UndirectedEdge(Vertice(7),Vertice(1)), UndirectedEdge(Vertice(6),Vertice(7)), UndirectedEdge(Vertice(4),Vertice(6)), UndirectedEdge(Vertice(10),Vertice(4))))
+
+
+    UnRootedTreeIsomorphismAlgorithm.areIsomorphic(tree1, tree2).areIsomorphic shouldBe true
+  }
+
   def testWithReferenceSolver(tree1: UnRootedTree, tree2: UnRootedTree): Unit = {
 
     val graph1 = transform(tree1)

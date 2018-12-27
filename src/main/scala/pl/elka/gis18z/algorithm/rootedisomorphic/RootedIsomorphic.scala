@@ -5,42 +5,72 @@ import pl.elka.gis18z.algorithm.Vertice
 object RootedIsomorphic {
   def rootedIsomorphic(tree1: RootedTree, tree2: RootedTree): List[(Vertice, Vertice)] = {
     val h = Math.max(tree1.height(), tree2.height())
-    val L = collection.mutable.Map[Int, List[Node]]()
+    val L = collection.mutable.Map[Int, List[(Int, Int)]]()
+    val tree1Id = tree1.root.asInstanceOf[Node].treeId
+    val tree2Id = tree2.root.asInstanceOf[Node].treeId
 
-    tree1.dfs((depth, vertice) => L(depth) = vertice :: L.getOrElse(depth, List.empty))
-    tree2.dfs((depth, vertice) => L(depth) = vertice :: L.getOrElse(depth, List.empty))
+    tree1.dfs((depth, vertice) => L(depth) = (vertice.treeId, vertice.id) :: L.getOrElse(depth, List.empty))
+    tree2.dfs((depth, vertice) => L(depth) = (vertice.treeId, vertice.id) :: L.getOrElse(depth, List.empty))
+
 
     (0 until h).reverse foreach(i => {
       L(i+1).indices foreach(j => {
         val v = L(i+1)(j)
-        val vParent = L(i).find(n => n.id == v.parent.id && n.treeId == v.treeId).get
-        val newVParent = vParent.copy(orderedLabel = vParent.orderedLabel :+ v.label,
-                                      orderedChildren = vParent.orderedChildren :+ v)
-        L(i) = L(i).map(n => if(n.id == newVParent.id && n.treeId == v.treeId) newVParent else n)
+
+        v._1 match {
+          case `tree1Id` => setOrderedLabelAndChildren(tree1, v._2)
+          case `tree2Id` => setOrderedLabelAndChildren(tree2, v._2)
+        }
       })
 
-      L(i) = L(i).sortWith(sortSet)
-      val ranking = L(i).groupBy(_.orderedLabel.length).keys.toList
-      L(i) = L(i).map(n => n.copy(label = ranking.indexOf(n.orderedLabel.length)))
+      val LiNodes: List[Node] = L(i).flatMap(l => l._1 match {
+        case `tree1Id` => tree1.findNode(l._2)
+        case `tree2Id` => tree2.findNode(l._2)
+      })
+
+      L(i) = LiNodes.sortWith(sortSet).map(n => (n.treeId, n.id))
+      val ranking = LiNodes.groupBy(_.orderedLabel).keys.toList.reverse
+      LiNodes.foreach {
+        case n if n.treeId == `tree1Id` => tree1.mapNode(n.copy(label = Some(ranking.indexOf(n.orderedLabel))))
+        case n if n.treeId == `tree2Id` => tree2.mapNode(n.copy(label = Some(ranking.indexOf(n.orderedLabel))))
+      }
     })
 
-    if(L.last._2.head.label == L.last._2.last.label) {
-      val mapping = generateMapping(L.last._2.head, L.last._2.last,List.empty).map(n => (Vertice(n._1.id),Vertice(n._2.id)))
+    val root1 = tree1.root.asInstanceOf[Node]
+    val root2 = tree2.root.asInstanceOf[Node]
+
+    if(root1.label == root2.label) {
+      val mapping = generateMapping(root1, root2,List.empty).map(n => (Vertice(n._1.id),Vertice(n._2.id)))
       if(mapping.length == L.map(_._2.length).sum/2) mapping else List.empty
     } else
       List.empty
+  }
+
+  private def setOrderedLabelAndChildren(tree: RootedTree, verticeId: Int) = {
+    val vNode = tree.findNode(verticeId).get
+    val vParent = tree.findNode(vNode.parent.id).get
+
+    if(vNode.label.isDefined) {
+      vParent.orderedLabel = vParent.orderedLabel :+ vNode.label.get
+    } else {
+      vParent.orderedLabel = vParent.orderedLabel :+ 0
+    }
+    vParent.orderedChildren = vParent.orderedChildren :+ vNode
+
+
+    tree.mapNode(vParent)
   }
 
   private def sortSet(v: Node, w: Node): Boolean = {
     sortedLeg(v.orderedLabel.toList, w.orderedLabel.toList)
   }
 
-  private def sortedLeg(a: List[Int], b: List[Int]): Boolean = (a,b) match {
+  private def sortedLeg(a: Seq[Int], b: Seq[Int]): Boolean = (a,b) match {
     case (Nil, Nil) => true
     case (_, Nil) => true
     case (Nil, _) => false
     case (x :: rest1, y :: rest2) if x == y => sortedLeg(rest1,rest2)
-    case (x :: _, y :: _) => x > y
+    case (x :: _, y :: _) => x < y
   }
 
   private def generateMapping(v: Node, w: Node, map: List[(Node, Node)]): List[(Node, Node)] = {
