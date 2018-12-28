@@ -1,6 +1,7 @@
 package pl.elka.gis18z.algorithm.rootedisomorphic
 
 import pl.elka.gis18z.algorithm.Vertice
+import scala.math.Ordering.Implicits._
 
 object RootedIsomorphic {
   def rootedIsomorphic(tree1: RootedTree, tree2: RootedTree): List[(Vertice, Vertice)] = {
@@ -62,15 +63,7 @@ object RootedIsomorphic {
   }
 
   private def sortSet(v: Node, w: Node): Boolean = {
-    sortedLeg(v.orderedLabel.toList, w.orderedLabel.toList)
-  }
-
-  private def sortedLeg(a: Seq[Int], b: Seq[Int]): Boolean = (a,b) match {
-    case (Nil, Nil) => true
-    case (_, Nil) => true
-    case (Nil, _) => false
-    case (x :: rest1, y :: rest2) if x == y => sortedLeg(rest1,rest2)
-    case (x :: _, y :: _) => x < y
+    v.orderedLabel.toList < w.orderedLabel.toList
   }
 
   private def generateMapping(v: Node, w: Node, map: List[(Node, Node)]): List[(Node, Node)] = {
