@@ -1,0 +1,14 @@
+java -Xms6g -Xmx6g -jar target/scala-2.12/gis-assembly-0.1.jar --n1 1000 --n2 3000 --ns 200 --d1 400 --d2 500 --ds 5 --repeat 5 --output result_eta_8h
+Started at: Tue Jan 08 08:00:57 CET 2019
+Generating problem instances ...
+Problem instances generated.
+Warming up JVM for 0.005 seconds
+Done warming up JVM
+Running 1000 instances, from n = 1000 to n = 3000 and from d = 400 to d = 500...
+Done running all instances.00
+Dumping results...
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Results dumped to: /home/mariusz/Documents/elka/GIs/projekt/gis/result_eta_8h
+Finished at: Tue Jan 08 16:50:51 CET 2019
+Total time: 529.9154 minutes
