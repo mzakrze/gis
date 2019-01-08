@@ -9,12 +9,6 @@ import pl.elka.gis18z.simulation_runner.{SimulationResult, SimulationRunner}
 
 object Application extends App {
 
-  /*
-  TODO:
-  - algorytm może też działać szybiej/wolniej w zależności od tego czy dla danego problemu izomorfizm jest czy nie ma
-  - można też dodać flagę, która wygeneruje tylko przypadki pozytywne, albo tylko negatywne
-   */
-
   override def main(args: Array[String]): Unit = {
 
       val startTime = Calendar.getInstance().getTime()
