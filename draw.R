@@ -3,7 +3,6 @@ library("ggplot2")
 
 theoretical_complexity <- function(depth) {
     function(verticesNo) {
-        # FIXME - nie mam pojęcia czy taka faktycznie jest złożoność. Dałem narazie taką żeby sie ladnie rysowało
         verticesNo * verticesNo
     }
 }
