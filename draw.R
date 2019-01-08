@@ -22,9 +22,9 @@ for(depth in unique_depths) {
     c = mean(real_time / theory_time)
 
     plot <- ggplot(data = depth_res, aes(y = Time..ms., x = Number.of.vertices)) +
-        ggtitle(paste("Complexity for depth =", toString(depth))) +
-        xlab("Number of vertices") +
-        ylab("Time [ms]") +
+        ggtitle(paste("Złożoność dla eskcentryczności =", toString(depth))) +
+        xlab("Liczba wierzchołków") +
+        ylab("Czas wykonania [ms]") +
         geom_point() +
         stat_function(fun = function(n) { c  * theoretical_complexity(depth)(n) }, colour = "green")
     ggsave(paste("result/d_", toString(depth), '.jpg', sep=""), plot = plot)
