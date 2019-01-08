@@ -4,7 +4,7 @@ library("ggplot2")
 theoretical_complexity <- function(depth) {
     function(verticesNo) {
         # FIXME - nie mam pojęcia czy taka faktycznie jest złożoność. Dałem narazie taką żeby sie ladnie rysowało
-        verticesNo * verticesNo * depth
+        verticesNo * verticesNo
     }
 }
 
@@ -18,8 +18,8 @@ for(depth in unique_depths) {
     # map theoretical complexity to number of miliseconds
     # Big O-notation <=> (Exists c, n1) (For all n > n1): f(n) > c * g(n1)
     # c = ???
-    real_time = simulation_results$Time..ms.
-    theory_time = sapply(simulation_results$Number.of.vertices, theoretical_complexity(depth))
+    real_time = depth_res$Time..ms.
+    theory_time = sapply(depth_res$Number.of.vertices, theoretical_complexity(depth))
     c = mean(real_time / theory_time)
 
     plot <- ggplot(data = depth_res, aes(y = Time..ms., x = Number.of.vertices)) +
@@ -27,7 +27,7 @@ for(depth in unique_depths) {
         xlab("Number of vertices") +
         ylab("Time [ms]") +
         geom_point() +
-        stat_function(fun = function(n) { c  * theoretical_complexity(depth)(n) })
+        stat_function(fun = function(n) { c  * theoretical_complexity(depth)(n) }, colour = "green")
     ggsave(paste("result/d_", toString(depth), '.jpg', sep=""), plot = plot)
 
 }
